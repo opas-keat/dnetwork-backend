@@ -1,5 +1,8 @@
 # ./Dockerfile
 FROM golang:1.19-alpine AS builder
+# Set version
+ARG VERSION=dev
+
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \
     CGO_ENABLED=0 \
@@ -15,12 +18,14 @@ COPY go.sum .
 RUN go mod download
 
 # Copy the code into the container.
-ADD cmd/ cmd/
-ADD .env .env
+COPY main.go .
+# ADD cmd/ cmd/
+# ADD .env .env
 
 # Set necessary environment variables needed for our image 
 # and build the API server.
-RUN go build -o main cmd/v1/main.go
+# RUN go build -o main cmd/v1/main.go
+RUN go build -o main -ldflags=-X=main.version=${VERSION} main.go
 
 FROM alpine:latest
 # Move to /dist directory as the place for resulting binary folder
