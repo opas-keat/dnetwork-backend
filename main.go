@@ -1,16 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+)
 
 var version = "dev"
 
-func main() {
-
-	fmt.Printf("Version: %s\n", version)
-
-	fmt.Println(hello())
+func Greeting() string {
+	return "Hello"
 }
 
-func hello() string {
-	return "Hello Golang"
+func GoodBye(name string) string {
+	text := "Goodbye, " + name + "..."
+	return text
+}
+
+func Add(a int, b int) int {
+	return a + b
+}
+
+func main() {
+	http.HandleFunc("/", GreetingAPI)
+	http.ListenAndServe(":3000", nil)
+}
+
+func GreetingAPI(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello Gopher")
 }
