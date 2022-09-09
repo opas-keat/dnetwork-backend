@@ -46,9 +46,9 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: opas/dnetwork-backend:latest
-          # tags: |            
-          #   ${{env.VERSION_TAG}}
-          #   ${{env.LASTEST_TAG}}
+          # tags: opas/dnetwork-backend:latest
+          tags: |            
+            ${{env.GITHUB_REPOSITORY}}:${{env.VERSION_TAG}}
+            ${{env.GITHUB_REPOSITORY}}:${{env.LASTEST_TAG}}
           build-args: |
             ${{steps.version_step.outputs.version}}
