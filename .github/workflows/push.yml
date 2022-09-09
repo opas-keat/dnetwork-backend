@@ -39,6 +39,7 @@ jobs:
       - name: PrepareReg Names
         id: read-docker-image-identifiers
         run: |
+          DOCKER_IMAGE=opas/dnetwork-backend
           echo VERSION_TAG=$(echo ${{ steps.version_step.outputs.version_tag }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
           echo LASTEST_TAG=$(echo ${{ steps.version_step.outputs.latest_tag  }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
       - name: Build and push
@@ -46,8 +47,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: |
-            opas/dnetwork-backend
+          tags: |            
             ${{env.VERSION_TAG}}
             ${{env.LASTEST_TAG}}
           build-args: |
