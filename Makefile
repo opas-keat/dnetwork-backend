@@ -12,14 +12,6 @@ hello:
 build:
 	GOOS=windows GOARCH=amd64 go build -o bin/dnetwork.exe cmd/v1/main.go
 
-SERVICE_NAME=Auth-Api
-SERVICE_IMAGE=somprasongd/auth-api
-SERVICE_VERSION=1.0.0
-
-export SERVICE_NAME
-export SERVICE_IMAGE
-export SERVICE_VERSION
-
 doc:
 	@echo "---Generate doc files $(SERVICE_NAME)---"
 	swag init -g pkg/module/module.go -o pkg/docs

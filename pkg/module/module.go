@@ -2,6 +2,7 @@ package module
 
 import (
 	"ect/dnetwork/backend/pkg/app"
+	"ect/dnetwork/backend/pkg/docs"
 	"ect/dnetwork/backend/pkg/module/auth"
 	"fmt"
 	"net/http"
@@ -28,12 +29,12 @@ func Init(ctx *app.Context) {
 		basePath = ctx.Config.App.BaseUrl
 	}
 
-	// docs.SwaggerInfo.Title = "Todo Service API Document"
-	// docs.SwaggerInfo.Description = "List of APIs for Todo Service."
-	// docs.SwaggerInfo.Version = "1.0"
-	// docs.SwaggerInfo.Host = host
-	// docs.SwaggerInfo.BasePath = basePath
-	// docs.SwaggerInfo.Schemes = []string{"https", "http"}
+	docs.SwaggerInfo.Title = "ECT Service API Document"
+	docs.SwaggerInfo.Description = "List of APIs for ECT Service."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = host
+	docs.SwaggerInfo.BasePath = basePath
+	docs.SwaggerInfo.Schemes = []string{"https", "http"}
 
 	//Init Swagger routes
 	ctx.Router.Get("/swagger/*", fiberSwagger.WrapHandler)

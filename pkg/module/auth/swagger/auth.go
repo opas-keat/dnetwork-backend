@@ -25,6 +25,11 @@ type AuthResponse struct {
 	Token string   `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAbWFpbC5jb20iLCJpYXQiOjE2NTk0MzI5NTYsInN1YiI6Ijk2YWUzNWM0LTE0Y2ItNDAzMy1iYTMwLTVkYTBmNjA2NjFiNCJ9.spR28QwRVbmOjJPu6iwRhA19jOpxYtgpRRsiaNWGTYk"`
 }
 
+type UpdateProfileForm struct {
+	PasswordOld string `json:"password_old"`
+	PasswordNew string `json:"password_new"`
+}
+
 type UserSampleData struct {
 	Data UserInfo `json:"user"`
 }
