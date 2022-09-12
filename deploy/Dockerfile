@@ -5,9 +5,8 @@ RUN go mod download
 COPY cmd ./cmd
 COPY pkg ./pkg
 ENV GOARCH=amd64
-RUN go build -o /go/bin/api cmd/api/main.go
-# RUN go build -o /go/bin/api cmd/api/main.go \
-#     && go build -o /go/bin/migrate cmd/migrate/main.go
+RUN go build -o /go/bin/api cmd/api/main.go \
+    && go build -o /go/bin/migrate cmd/migrate/main.go
 
 
 FROM alpine:latest  
@@ -18,9 +17,9 @@ EXPOSE 8080
 ENV TZ=Asia/Bangkok
 ENV APP_MODE=production
 
-# COPY migrations /app/migrations
+COPY migrations /app/migrations
 COPY --from=build /go/bin/api /app/api
-# COPY --from=build /go/bin/migrate /app/migrate
+COPY --from=build /go/bin/migrate /app/migrate
 
 
 CMD ["/app/api"] 
