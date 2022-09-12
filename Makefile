@@ -40,9 +40,9 @@ run:
 # 	@echo "---Start Dev $(SERVICE_NAME)---"
 # 	go run cmd/api/main.go
 
-# d-build:
-# 	@echo "---Build $(SERVICE_NAME) $(SERVICE_IMAGE):$(SERVICE_VERSION)---"
-# 	docker build -t $(SERVICE_IMAGE):$(SERVICE_VERSION) -f deploy/Dockerfile .
+d-build:
+	@echo "---Build $(SERVICE_NAME) $(SERVICE_IMAGE):$(SERVICE_VERSION)---"
+	docker build -t $(SERVICE_IMAGE):$(SERVICE_VERSION) -f deploy/Dockerfile .
 
 # d-build-debug:
 # 	@echo "---Build $(SERVICE_NAME) $(SERVICE_IMAGE):$(SERVICE_VERSION)---"
