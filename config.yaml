@@ -19,5 +19,17 @@ db:
   database: 'ectapi'
   sslmode: 'disable'
 
+redis:
+  host: 'localhost'
+  port: 6379
+  password: ''
+  database: 0
+
 token:
-  secret: 'supers3cret'
+  access:
+    secret: 'access_supers3cret'
+    expires: '5m'
+  refresh:
+    secret: 'refresh_supers3cret'
+    # 30 day
+    expires: '720h'

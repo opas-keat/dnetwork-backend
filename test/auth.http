@@ -1,36 +1,62 @@
 @host=http://localhost:8080
 
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAbWFpbC5jb20iLCJzdWIiOiJmODYxOTM2Yy0wNjJmLTRlNDktODJhOC0wOGYzOWFiZWRkYTkiLCJpYXQiOjE2NTk2MDQ5NDN9.xLmFazSsF8hJMqfGXGePr6VzVDY_ZvuyNe7T-jpRcIk
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXIxMkBtYWlsLmNvbSIsImV4cCI6MTY1OTY4MDM4NiwiaWF0IjoxNjU5NjgwMDg2LCJyb2xlIjoiYWRtaW4iLCJzdWIiOiJhYzQwOWI3Yy00OWFhLTQxNjAtODBiZi1lMmU0Y2E4OWE2YzQiLCJ1c2VyX2lkIjoiNzM0OWM4OTItZGYyOS00NWM5LWJkODgtNGU1MGRmZmY0ZTFhIn0.woXYTlZpldU57FnAIddbJn-wSjq6QIzp_WUWJY9b5bc
 
+@refresh_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NjU2NDYzNzEsImlhdCI6MTY2MzA1NDM3MSwic3ViIjoiYjZlNjhhNTgtNGNiZi00NDRlLTg1MzktNmMxNzUzNWNkMmZiIn0.xNLEFgtl1EmKD7wwHD1Y4Yoku2QGMMSfCfXNgcgYurY
 
 ### register
+# @name register
 POST {{host}}/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "email": "user@mail.com",
+  "email": "user1@mail.com",
   "password": "user"
 }
 
 ### login
+# @name login
 POST {{host}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "user@mail.com",
+  "email": "user1@mail.com",
   "password": "user"
 }
+###
+@token = {{login.response.body.data.auth.access_token}}
 
 ### profile
+# @name profile
 GET {{host}}/api/v1/auth/profile
 Authorization: Bearer {{token}}
 
 ### update profile
+# @name update_profile
 PATCH  {{host}}/api/v1/auth/profile
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "password_old": "1234",
-  "password_new": "user"
+  "password_old": "user",
+  "password_new": "1234"
+}
+###
+
+@refresh_token = {{login.response.body.data.auth.refresh_token}}
+
+### refresh token
+POST  {{host}}/api/v1/auth/refresh
+Content-Type: application/json
+
+{
+  "refresh_token": "{{refresh_token}}"
+}
+
+### revoke token
+POST  {{host}}/api/v1/auth/revoke
+Content-Type: application/json
+
+{
+  "refresh_token": "{{refresh_token}}"
 }

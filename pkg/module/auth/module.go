@@ -13,19 +13,18 @@ import (
 
 type RouteConfig struct {
 	BaseURL     string
-	TokenSecret string
 	Router      *fiber.App
 	AuthService ports.AuthService
 }
 
 func Init(ctx *app.Context) {
 	// สร้าง dependencies ทั้งหมด
+	tokenRepo := repository.NewTokenRepository(ctx.Cache)
 	repo := repository.NewAuthRepositoryDB(ctx.DB.DB)
-	svc := service.NewAuthService(ctx.Config, repo)
+	svc := service.NewAuthService(ctx.Config, repo, tokenRepo)
 
 	cfg := RouteConfig{
 		BaseURL:     ctx.Config.App.BaseUrl,
-		TokenSecret: ctx.Config.Token.SecretKey,
 		Router:      ctx.Router,
 		AuthService: svc,
 	}
@@ -41,9 +40,9 @@ func SetupRoutes(cfg RouteConfig) {
 	auth.Post("/register", util.WrapFiberHandler(h.Register))
 	auth.Post("/login", util.WrapFiberHandler(h.Login))
 
-	// authentication := util.WrapFiberHandler(middleware.Authentication(cfg.TokenSecret))
-	// auth.Get("/profile", authentication, util.WrapFiberHandler(h.Profile))
-	// auth.Patch("/profile", authentication, util.WrapFiberHandler(h.UpdateProfile))
 	auth.Get("/profile", util.WrapFiberHandler(h.Profile))
 	auth.Patch("/profile", util.WrapFiberHandler(h.UpdateProfile))
+
+	auth.Post("/refresh", util.WrapFiberHandler(h.RefreshToken))
+	auth.Post("/revoke", util.WrapFiberHandler(h.RevokeToken))
 }

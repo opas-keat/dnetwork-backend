@@ -4,6 +4,7 @@ import (
 	"ect/dnetwork/backend/pkg/app"
 	"ect/dnetwork/backend/pkg/docs"
 	"ect/dnetwork/backend/pkg/module/auth"
+	"ect/dnetwork/backend/pkg/module/user"
 	"fmt"
 	"net/http"
 
@@ -14,6 +15,7 @@ import (
 
 func Init(ctx *app.Context) {
 	auth.Init(ctx)
+	user.Init(ctx)
 
 	ctx.Router.Get("/healthz", healthCheckHandler)
 

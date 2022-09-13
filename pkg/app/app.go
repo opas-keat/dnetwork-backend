@@ -6,12 +6,14 @@ import (
 	log "ect/dnetwork/backend/pkg/common/logger"
 	"ect/dnetwork/backend/pkg/config"
 	"ect/dnetwork/backend/pkg/util"
+	"ect/dnetwork/backend/pkg/util/cache"
 	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -23,6 +25,7 @@ type Context struct {
 	Config *config.Config
 	Router *fiber.App
 	DB     *database.GormDB
+	Cache  *cache.RedisClient
 }
 
 type app struct {
@@ -51,6 +54,12 @@ func (a *app) InitDS() {
 		panic(err)
 	}
 	a.DB = gorm
+
+	redis, err := database.NewRedisClient(a.Config)
+	if err != nil {
+		panic(err)
+	}
+	a.Cache = redis
 }
 
 func (a *app) Close() {
@@ -59,12 +68,17 @@ func (a *app) Close() {
 		log.Info("Closing database")
 		a.DB.CloseDB()
 	}
+	// close redis
+	if a.Cache != nil {
+		log.Info("Closing redis")
+		a.Cache.Close()
+	}
 	// remove liveness file
 	log.Info("Removing liveness file")
 	os.Remove(a.Config.App.LivenessFile)
 }
 
-func (a *app) InitRouter() {
+func (a *app) InitRouter(enforcer *casbin.Enforcer) {
 	cfg := fiber.Config{
 		AppName:               fmt.Sprintf("%s v%s", a.Config.App.Name, a.Config.App.Version),
 		ReadTimeout:           a.Config.Server.TimeoutRead,
@@ -82,11 +96,14 @@ func (a *app) InitRouter() {
 	r.Use(recover.New())
 
 	// authentication with exclude list
-	excludeList := map[string][]string{
-		"/api/v1/auth/register": {http.MethodPost},
-		"/api/v1/auth/login":    {http.MethodPost},
-	}
-	r.Use(util.WrapFiberHandler(middleware.Authentication(a.Config.Token.SecretKey, excludeList)))
+	// excludeList := map[string][]string{
+	// 	"/api/v1/auth/register": {http.MethodPost},
+	// 	"/api/v1/auth/login":    {http.MethodPost},
+	// }
+	// r.Use(util.WrapFiberHandler(middleware.Authentication(a.Config.Token.SecretKey, excludeList)))
+	r.Use(util.WrapFiberHandler(middleware.AuthenticationCasbin(a.Config.Token.AccessSecretKey, enforcer)))
+	// authorization with casbin
+	r.Use(util.WrapFiberHandler(middleware.Authorize(enforcer)))
 
 	a.Router = r
 }

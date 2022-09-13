@@ -2,7 +2,8 @@ package ports
 
 import (
 	"ect/dnetwork/backend/pkg/module/auth/core/dto"
-	"ect/dnetwork/backend/pkg/module/auth/core/model"
+	"ect/dnetwork/backend/pkg/module/user/core/model"
+	"time"
 )
 
 // interface สำหรับ output port
@@ -12,10 +13,18 @@ type AuthRepository interface {
 	SaveProfile(m *model.User) error
 }
 
+type TokenRepository interface {
+	SetToken(tokenId string, data map[string]any, duration time.Duration) error
+	GetToken(tokenId string) (string, error)
+	DeleteToken(tokenId string) (int64, error)
+}
+
 // interface สำหรับ input port
 type AuthService interface {
 	Register(form dto.RegisterForm, reqId string) error
 	Login(form dto.LoginForm, reqId string) (*dto.AuthResponse, error)
 	Profile(email string, reqId string) (*dto.UserInfo, error)
 	UpdateProfile(email string, form dto.UpdateProfileForm, reqId string) (*dto.UserInfo, error)
+	RefreshToken(form dto.RefreshForm, reqId string) (*dto.AuthResponse, error)
+	RevokeToken(form dto.RefreshForm, reqId string) error
 }

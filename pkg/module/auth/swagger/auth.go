@@ -14,6 +14,11 @@ type LoginForm struct {
 	Password string `json:"password" example:"password1234"`
 }
 
+type UpdateProfileForm struct {
+	PasswordOld string `json:"password_old"`
+	PasswordNew string `json:"password_new"`
+}
+
 type UserInfo struct {
 	ID    string `json:"id" example:"bfbc2a69-9825-4a0e-a8d6-ffb985dc719c"`
 	Email string `json:"email" example:"user@mail.com"`
@@ -25,17 +30,16 @@ type AuthResponse struct {
 	Token string   `json:"token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAbWFpbC5jb20iLCJpYXQiOjE2NTk0MzI5NTYsInN1YiI6Ijk2YWUzNWM0LTE0Y2ItNDAzMy1iYTMwLTVkYTBmNjA2NjFiNCJ9.spR28QwRVbmOjJPu6iwRhA19jOpxYtgpRRsiaNWGTYk"`
 }
 
-type UpdateProfileForm struct {
-	PasswordOld string `json:"password_old"`
-	PasswordNew string `json:"password_new"`
-}
-
-type UserSampleData struct {
+type AuthUserSampleData struct {
 	Data UserInfo `json:"user"`
 }
 
 type AuthSampleData struct {
 	Data AuthResponse `json:"auth"`
+}
+
+type RefreshForm struct {
+	Token string `json:"refresh_token" validate:"required"`
 }
 
 type ErrorDetailRegister struct {
@@ -65,8 +69,8 @@ type ErrorDetailUpdate struct {
 	Message string `json:"message" example:"password_old field is required"`
 }
 
-type ErrUpdateSampleData struct {
-	Code    string              `json:"code" example:"422"`
-	Message string              `json:"message" example:"invalid data see details"`
-	Details []ErrorDetailUpdate `json:"details"`
-}
+// type ErrUpdateSampleData struct {
+// 	Code    string              `json:"code" example:"422"`
+// 	Message string              `json:"message" example:"invalid data see details"`
+// 	Details []ErrorDetailUpdate `json:"details"`
+// }

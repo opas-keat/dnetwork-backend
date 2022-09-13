@@ -2,8 +2,8 @@ package repository
 
 import (
 	"ect/dnetwork/backend/pkg/common"
-	"ect/dnetwork/backend/pkg/module/auth/core/model"
 	"ect/dnetwork/backend/pkg/module/auth/core/ports"
+	"ect/dnetwork/backend/pkg/module/user/core/model"
 	"errors"
 
 	"gorm.io/gorm"
