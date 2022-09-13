@@ -21,6 +21,11 @@ type UserInfo struct {
 	Role  string `json:"role"`
 }
 
+type TokenInfo struct {
+	Token  string    `json:"token"`
+	Expire time.Time `json:"expire"`
+}
+
 func (u *UserInfo) ToPayloadMap() map[string]interface{} {
 	// Convert to a json string
 

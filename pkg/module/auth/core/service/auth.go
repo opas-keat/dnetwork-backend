@@ -180,13 +180,13 @@ func (s authService) UpdateProfile(email string, form dto.UpdateProfileForm, req
 		return nil, common.ErrDbQuery
 	}
 
-	match := util.CheckPasswordHash(form.PasswordOld, user.Password)
+	match := util.CheckPasswordHashArgon(form.PasswordOld, user.Password)
 
 	if !match {
 		return nil, ErrUserPasswordNotMatch
 	}
 
-	hashPwd, err := util.HashPassword(form.PasswordNew)
+	hashPwd, err := util.HashPasswordArgon(form.PasswordNew)
 
 	if err != nil {
 		logger.ErrorWithReqId(err.Error(), reqId)

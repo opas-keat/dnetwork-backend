@@ -63,8 +63,10 @@ func AuthenticationCasbin(secretKey string, enforcer *casbin.Enforcer) common.Ha
 	return func(c common.HContext) error {
 		public := false
 
+		// ระบุ suffix เช่น 2 จะใช้ r2, p2, e2, m2
 		enforceContext := casbin.NewEnforceContext("2")
 
+		// ต้องส่ง enforceContext เข้าไปด้วย ถ้าไม่ส่งจะเรียกที่ r, p, e, m ตลอดนะ
 		public, err := enforcer.Enforce(enforceContext, c.Path(), c.Method())
 		if err != nil {
 			logger.ErrorWithReqId(err.Error(), c.RequestId())

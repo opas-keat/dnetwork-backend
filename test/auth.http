@@ -10,8 +10,8 @@ POST {{host}}/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "email": "user1@mail.com",
-  "password": "user"
+  "email": "user10@mail.com",
+  "password": "user10"
 }
 
 ### login
@@ -20,8 +20,8 @@ POST {{host}}/api/v1/auth/login
 Content-Type: application/json
 
 {
-  "email": "user1@mail.com",
-  "password": "user"
+  "email": "user10@mail.com",
+  "password": "1234"
 }
 ###
 @token = {{login.response.body.data.auth.access_token}}
@@ -38,7 +38,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "password_old": "user",
+  "password_old": "user10",
   "password_new": "1234"
 }
 ###

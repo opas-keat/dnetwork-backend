@@ -2,13 +2,12 @@ package util
 
 import (
 	"github.com/matthewhartstonge/argon2"
-	"golang.org/x/crypto/bcrypt"
 )
 
-func HashPassword(password string) (string, error) {
-	encoded, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(encoded), err
-}
+// func HashPassword(password string) (string, error) {
+// 	encoded, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+// 	return string(encoded), err
+// }
 
 func HashPasswordArgon(password string) (string, error) {
 	argon := argon2.DefaultConfig()
@@ -16,10 +15,10 @@ func HashPasswordArgon(password string) (string, error) {
 	return string(encoded), err
 }
 
-func CheckPasswordHash(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
+// func CheckPasswordHash(password, hash string) bool {
+// 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+// 	return err == nil
+// }
 
 func CheckPasswordHashArgon(password, hash string) bool {
 	ok, err := argon2.VerifyEncoded([]byte(password), []byte(hash))

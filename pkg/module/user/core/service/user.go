@@ -44,7 +44,7 @@ func (s userService) Create(form dto.NewUserForm, reqId string) (*dto.UserRespon
 	}
 
 	user := mapper.CreateUserFormToModel(form)
-	hashPwd, err := util.HashPassword(form.Password)
+	hashPwd, err := util.HashPasswordArgon(form.Password)
 	if err != nil {
 		logger.ErrorWithReqId(err.Error(), reqId)
 		return nil, ErrHashPassword
@@ -113,7 +113,7 @@ func (s userService) UpdatePassword(id string, form dto.UpdateUserPasswordForm, 
 		return nil, common.ErrDbQuery
 	}
 
-	hashPwd, err := util.HashPassword(form.Password)
+	hashPwd, err := util.HashPasswordArgon(form.Password)
 
 	if err != nil {
 		logger.ErrorWithReqId(err.Error(), reqId)

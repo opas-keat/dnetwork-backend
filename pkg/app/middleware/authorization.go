@@ -15,14 +15,17 @@ var (
 
 func Authorize(enforcer *casbin.Enforcer) common.HandleFunc {
 	return func(c common.HContext) error {
+		// ถ้าเป็น public route ให้ข้ามการตรวจสอบไป
 		public := c.Locals("public").(bool)
 		if public {
 			return c.Next()
 		}
 
+		// ดึงค่า role ออกมา
 		u := c.Locals("user").(jwt.MapClaims)
 		role := u["role"].(string)
 
+		// ส่ง request เข้าไปตรวจสอบ
 		ok, err := enforcer.Enforce(role, c.Path(), c.Method())
 
 		if err != nil {
